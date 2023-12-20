@@ -1,40 +1,18 @@
-import Button from '@mui/material/Button';
+import { useState, useEffect} from 'react';
+import CompaniesTable from "./components/CompaniesTable";
+import {getAllCompanies} from "./utils/dataGetters"
 
 
 const App = () => {
-  const url = "/api/v1/app-service/get-apps";
-  const requestData = {
-    "pageNumber": 0,
-    "pageSize": 25
-  }
-
-  const fetchData = (url, data) => {
-    const options = {
-      method: 'PUT',
-      headers: {
-        "ngrok-skip-browser-warning": "69420",
-        "Content-type": "application/json"
-      }
-    }
-    options.body = JSON.stringify(data)
-
-    return fetch(url, options)
-      .then(resp => {
-        if (!resp.ok) {
-          throw new Error('Something went Wrong')
-        }
-      })
-      .then(data => {
-        console.log(data);
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  }
+  const [tableData, setTableData] = useState([])
+  
+  useEffect(() => {
+    getAllCompanies(25, setTableData)
+  }, [])
 
   return (
     <div className="App">
-      <Button variant="contained" onClick={() => fetchData(url, requestData)}>Say Hello</Button>
+      <CompaniesTable tableData={tableData} setTableData={setTableData}/>
     </div>
   );
 }
