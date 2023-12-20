@@ -1,23 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import Button from '@mui/material/Button';
 
-function App() {
+
+const App = () => {
+  const url = "/api/v1/app-service/get-apps";
+  const requestData = {
+    "pageNumber": 0,
+    "pageSize": 25
+  }
+
+  const fetchData = (url, data) => {
+    const options = {
+      method: 'PUT',
+      headers: {
+        "ngrok-skip-browser-warning": "69420",
+        "Content-type": "application/json"
+      }
+    }
+    options.body = JSON.stringify(data)
+
+    return fetch(url, options)
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error('Something went Wrong')
+        }
+      })
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Button variant="contained" onClick={() => fetchData(url, requestData)}>Say Hello</Button>
     </div>
   );
 }
