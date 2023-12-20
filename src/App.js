@@ -4,15 +4,26 @@ import {getAllCompanies} from "./utils/dataGetters"
 
 
 const App = () => {
-  const [tableData, setTableData] = useState([])
+  const [tableData, setTableData] = useState([]);
   
   useEffect(() => {
-    getAllCompanies(25, setTableData)
+    const getData = async () => {
+      const resp = await getAllCompanies(setTableData, 25)
+      if (!resp.ok) {
+        await getAllCompanies(setTableData, 25)
+      }
+    }
+    getData()
   }, [])
 
   return (
     <div className="App">
-      <CompaniesTable tableData={tableData} setTableData={setTableData}/>
+      <h1>APP INVENTORY</h1>
+      {
+        tableData &&
+        <CompaniesTable tableData={tableData} setTableData={setTableData}/>
+      }
+
     </div>
   );
 }
